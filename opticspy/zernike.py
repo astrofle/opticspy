@@ -401,7 +401,7 @@ class Coefficient(object):
 
 
 
-def fitting(Z,n,remain3D=False,remain2D=False,barchart=False,interferogram=False,removepiston=True):
+def fitting(Z,n,remain3D=False,remain2D=False,barchart=False,interferogram=False,removepiston=True,printreport=True):
 	"""
 	------------------------------------------------
 	fitting(Z,n)
@@ -423,6 +423,8 @@ def fitting(Z,n,remain3D=False,remain2D=False,barchart=False,interferogram=False
 	aberrations.
 
 	removepiston: if remove piston, default = True
+
+	printreport: if print table with Zernike coefficients, default = True
 	------------------------------------------------
 	"""
 
@@ -438,9 +440,6 @@ def fitting(Z,n,remain3D=False,remain2D=False,barchart=False,interferogram=False
 		C = [0]*i+[1]+[0]*(37-i-1)
 		ZF = __interferometer__.__zernikepolar__(C,r,u)
 		mask = (r > 1)
-#		for i in range(l):
-#			for j in range(l):
-#				if x2[i]**2+y2[j]**2>1:
 		ZF[mask] = 0
 		a = sum(sum(Z*ZF))*2*2/l/l/__np__.pi
 		fitlist.append(a)
@@ -449,9 +448,6 @@ def fitting(Z,n,remain3D=False,remain2D=False,barchart=False,interferogram=False
 	l1 = len(fitlist)
 	fitlist = fitlist+[0]*(37-l1)
 	Z_new = Z - __interferometer__.__zernikepolar__(fitlist,r,u)
-#	for i in range(l):
-#		for j in range(l):
-#			if x2[i]**2+y2[j]**2>1:
 	Z_new[mask] = 0
 
 	#plot bar chart of zernike
@@ -516,7 +512,8 @@ def fitting(Z,n,remain3D=False,remain2D=False,barchart=False,interferogram=False
 	else:
 		pass
 	C = Coefficient(fitlist)  #output zernike Coefficient class
-	__tools__.zernikeprint(fitlist)
+	if printreport:
+		__tools__.zernikeprint(fitlist)
 	return fitlist,C
 
 def transform(zernikes, tx, ty, thetaR, scaling=1.0):
