@@ -442,7 +442,7 @@ def fitting(Z,n,remain3D=False,remain2D=False,barchart=False,interferogram=False
 				if x2[i]**2+y2[j]**2>1:
 					ZF[i][j]=0
 		a = sum(sum(Z*ZF))*2*2/l/l/__np__.pi
-		fitlist.append(round(a,3))
+		fitlist.append(a)
 
 
 	l1 = len(fitlist)
