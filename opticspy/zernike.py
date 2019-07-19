@@ -437,10 +437,11 @@ def fitting(Z,n,remain3D=False,remain2D=False,barchart=False,interferogram=False
 	for i in range(n):
 		C = [0]*i+[1]+[0]*(37-i-1)
 		ZF = __interferometer__.__zernikepolar__(C,r,u)
-		for i in range(l):
-			for j in range(l):
-				if x2[i]**2+y2[j]**2>1:
-					ZF[i][j]=0
+        mask = ((x2**2 + y2**2) > 1)
+#		for i in range(l):
+#			for j in range(l):
+#				if x2[i]**2+y2[j]**2>1:
+        ZF[mask] = 0
 		a = sum(sum(Z*ZF))*2*2/l/l/__np__.pi
 		fitlist.append(a)
 
@@ -448,10 +449,10 @@ def fitting(Z,n,remain3D=False,remain2D=False,barchart=False,interferogram=False
 	l1 = len(fitlist)
 	fitlist = fitlist+[0]*(37-l1)
 	Z_new = Z - __interferometer__.__zernikepolar__(fitlist,r,u)
-	for i in range(l):
-		for j in range(l):
-			if x2[i]**2+y2[j]**2>1:
-				Z_new[i][j]=0
+#	for i in range(l):
+#		for j in range(l):
+#			if x2[i]**2+y2[j]**2>1:
+	Z_new[mask] = 0
 
 	#plot bar chart of zernike
 	if barchart == True:
